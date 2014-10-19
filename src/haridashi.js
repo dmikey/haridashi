@@ -72,15 +72,18 @@ define(function (require) {
                 if (Object(result) === result) return result;
                 return self;
             };
-    }
+    };
+
+	haridashi.htmlDecode = function(input){
+	  var e = document.createElement('div');
+	  e.innerHTML = input;
+	  return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+	};
 
     var templatecache = {};
     haridashi.template = function tmpl(str, data){
-        // Simple JavaScript Templating
-        // John Resig - http://ejohn.org/ - MIT Licensed
-        // Figure out if we're getting a template, or if we need to
-        // load the template - and be sure to cache the result.
-        var fn = !/\W/.test(str) ?
+
+		var fn = !/\W/.test(str) ?
           templatecache[str] = templatecache[str] ||
             tmpl(document.getElementById(str).innerHTML) :
 
@@ -94,6 +97,11 @@ define(function (require) {
 
             // Convert the template into pure JavaScript
             str
+		      .replace(/&amp;/g, "&")
+			  .replace(/&lt;/g, "<")
+			  .replace(/&gt;/g, ">")
+			  .replace(/&quot;/g, "\"")
+			  .replace(/&#039;/g, "'")
               .replace(/[\r\t\n]/g, " ")
               .split("<%").join("\t")
               .replace(/((^|%>)[^\t]*)'/g, "$1\r")
