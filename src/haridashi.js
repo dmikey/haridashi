@@ -33,7 +33,7 @@ define(function (require) {
                       source[prop]))
 
               } else {
-                    obj[prop] = source[prop];
+                    obj[prop] = typeof obj[prop] != 'undefined' ? obj[prop] : source[prop];
               }
             }
         }
